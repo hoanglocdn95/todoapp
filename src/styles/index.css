@@ -1,0 +1,36 @@
+@import url(./global.css);
+@import url(./header.css);
+
+.layout {
+  width: 1024px;
+  margin: 15px auto;
+}
+
+.containerItem {
+  width: calc(25% - 75px / 4);
+  height: 150px;
+  border-radius: 10px;
+  border: 2px solid var(--primary);
+  padding: 15px;
+}
+
+.containerItem__title,
+.containerItem__status,
+.containerItem__description > p:first-child {
+  font-weight: bold;
+}
+
+.containerItem__status--new {
+  color: var(--new);
+}
+
+.containerItem__lineBreak {
+  height: 2px;
+  background: var(--primary);
+}
+.containerItem__description > p:last-child {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
