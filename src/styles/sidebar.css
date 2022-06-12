@@ -1,0 +1,20 @@
+.containerSidebar {
+  position: absolute;
+  width: 150px;
+  height: calc(100vh - 100px);
+  background-color: #f88f14;
+}
+
+.containerSidebar__item {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 2px solid white;
+}
+
+.containerSidebar__item > p {
+  font-size: 24px;
+  color: white;
+}

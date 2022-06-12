@@ -1,0 +1,15 @@
+.containerBody {
+  display: flex;
+  flex-wrap: wrap;
+  width: calc(100% - 150px);
+  margin-left: 150px;
+}
+
+.containerBody > div {
+  margin-right: 15px;
+  margin-top: 15px;
+}
+
+.containerBody > div:nth-child(4n + 1) {
+  margin-left: 15px;
+}

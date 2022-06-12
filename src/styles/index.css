@@ -1,5 +1,9 @@
 @import url(./global.css);
 @import url(./header.css);
+@import url(./sidebar.css);
+@import url(./body.css);
+@import url(./footer.css);
+@import url(./form.css);
 
 .layout {
   width: 1024px;
@@ -23,6 +27,16 @@
 .containerItem__status--new {
   color: var(--new);
 }
+
+/* <--- new class */
+.containerItem__status--doing {
+  color: var(--doing);
+}
+
+.containerItem__status--done {
+  color: var(--primary);
+}
+/* new class --->*/
 
 .containerItem__lineBreak {
   height: 2px;
