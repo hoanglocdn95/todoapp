@@ -11,6 +11,7 @@
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
+  position: relative;
 }
 
 .inputText > label {
@@ -34,6 +35,32 @@
 .inputText > input:focus-visible {
   outline: none;
   border-bottom: 2px solid black;
+}
+
+.inputText > p {
+  position: absolute;
+  bottom: -18px;
+  left: 115px;
+  white-space: nowrap;
+  color: #f90c0c;
+}
+
+.inputText--error > label {
+  color: #f90c0c;
+}
+
+.inputText--error > input,
+.inputText--error > input:focus-visible {
+  border-color: #f90c0c;
+}
+
+.inputText--valid > label {
+  color: #04be00;
+}
+
+.inputText--valid > input,
+.inputText--valid > input:focus-visible {
+  border-color: #04be00;
 }
 
 .buttonClass {
