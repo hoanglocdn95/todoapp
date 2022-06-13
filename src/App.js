@@ -8,15 +8,17 @@ import { MODE } from './constants';
 
 function App() {
   const [renderMode, setRenderMode] = useState(MODE.SHOW_LIST);
-  const handleCreateNewTask = () => {
-    setRenderMode(MODE.ADD_NEW);
+  const handleChangeRenderMode = (mode = MODE.ADD_NEW) => {
+    setRenderMode(mode);
   };
   return (
     <div className="layout">
-      <Header handleCreateNewTask={handleCreateNewTask} />
+      <Header
+        handleCreateNewTask={() => handleChangeRenderMode(MODE.ADD_NEW)}
+      />
       <Sidebar />
-      <Body mode={renderMode} />
-      <Footer />
+      <Body mode={renderMode} handleChangeRenderMode={handleChangeRenderMode} />
+      {renderMode === MODE.SHOW_LIST && <Footer />}
     </div>
   );
 }

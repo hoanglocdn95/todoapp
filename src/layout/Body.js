@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import TodoItem from '../components/TodoItem';
 import AddNewForm from '../shared/AddNewForm';
-import { MODE, todoList } from '../constants';
+import { MODE, STATUS, todoList } from '../constants';
 
-const Body = ({ mode }) => {
+const Body = ({ mode, handleChangeRenderMode }) => {
   const [todoItems, setTodoItems] = useState(todoList);
 
   const renderTodoItem = () => {
@@ -27,7 +27,14 @@ const Body = ({ mode }) => {
           <AddNewForm
             handleSubmit={(e) => {
               e.preventDefault();
-              console.log(e.target[0]);
+              const data = {
+                title: e.target[0].value,
+                creator: e.target[1].value,
+                description: e.target[2].value,
+                status: STATUS.NEW,
+              };
+              setTodoItems([data, ...todoItems]);
+              handleChangeRenderMode(MODE.SHOW_LIST);
             }}
           />
         );
