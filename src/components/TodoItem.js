@@ -1,13 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { ROUTE } from "../constants";
 
 const TodoItem = ({ title, creator, status, description, idTask }) => {
   return (
     <div
       className="containerItem"
-      to={`/detail/${idTask}`}
-      style={{ cursor: 'pointer' }}
+      to={`${ROUTE.DETAIL}/${idTask}`}
+      style={{ cursor: "pointer" }}
     >
-      <Link to={`/detail/${idTask}`}>
+      <Link to={`${ROUTE.DETAIL}/${idTask}`}>
         <p className="containerItem__title">Title: {title}</p>
         <p className="containerItem__creator">Creator: {creator}</p>
         <p

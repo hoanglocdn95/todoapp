@@ -1,20 +1,20 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 
-import ListTodoItem from '../components/ListTodoItem';
-import Footer from '../layout/Footer';
-import { LIST_TO_DO_KEY } from '../constants';
-import { localStorageUlti } from '../functions/localStorage';
+import ListTodoItem from "../components/ListTodoItem";
+import Footer from "../layout/Footer";
+import { LIST_TO_DO_KEY } from "../constants";
+import { localStorageUlti } from "../functions/localStorage";
 
 const { get } = localStorageUlti(LIST_TO_DO_KEY, []);
 
-const Doing = () => {
+const All = () => {
   const [todoItems, setTodoItems] = useState([]);
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
     const listTodoItem = get().filter((item) =>
-      item.title.toLowerCase().includes(searchParams.get('keyword') || '')
+      item.title.toLowerCase().includes(searchParams.get("keyword") || "")
     );
     setTodoItems(listTodoItem);
   }, [searchParams]);
@@ -27,4 +27,4 @@ const Doing = () => {
   );
 };
 
-export default Doing;
+export default All;

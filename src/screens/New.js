@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 import ListTodoItem from '../components/ListTodoItem';
 import Footer from '../layout/Footer';
@@ -9,10 +10,16 @@ const { get } = localStorageUlti(LIST_TO_DO_KEY, []);
 
 const New = () => {
   const [todoItems, setTodoItems] = useState([]);
+  const [searchParams] = useSearchParams();
+  
   useEffect(() => {
-    const listTodo = get().filter((item) => item.status === STATUS.NEW);
+    const listTodo = get().filter(
+      (item) =>
+        item.status === STATUS.NEW &&
+        item.title.toLowerCase().includes(searchParams.get('keyword') || '')
+    );
     setTodoItems(listTodo);
-  }, []);
+  }, [searchParams]);
 
   return (
     <>
