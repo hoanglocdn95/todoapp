@@ -26,3 +26,11 @@ p {
   font-size: 14px;
   line-height: 18px;
 }
+
+a {
+  text-decoration: none;
+}
+
+a:-webkit-any-link {
+  color: black;
+}
