@@ -3,10 +3,10 @@
   bottom: 15px;
   left: 50vw;
   display: flex;
-  width: 150px;
   height: 30px;
   border: 1px solid var(--primary);
   border-radius: 10px;
+  margin: 0 !important;
 }
 
 .containerFooter > div {
@@ -20,6 +20,7 @@
   color: var(--primary);
   border-right: 1px solid var(--primary);
   padding-bottom: 3px;
+  cursor: pointer;
 }
 
 .containerFooter > div:last-child {
@@ -30,4 +31,9 @@
 .containerFooter > div:last-child {
   font-size: 30px;
   padding-bottom: 8px;
+}
+
+.containerFooter__page--active {
+  color: white !important;
+  background-color: var(--primary);
 }
