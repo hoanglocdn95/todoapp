@@ -1,12 +1,13 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
-import { LIST_TO_DO_KEY, STATUS, ROUTE } from "../constants";
-import { localStorageUlti } from "../functions/localStorage";
-import InputText from "../components/InputText";
-import Button from "../components/Button";
-import RadioCheckboxButton from "../components/RadioCheckboxButton";
-import { setValidateRule } from "../functions/validation";
+import { LIST_TO_DO_KEY, STATUS, ROUTE } from '../constants';
+import { localStorageUlti } from '../functions/localStorage';
+import InputText from '../components/InputText';
+import Button from '../components/Button';
+import RadioCheckboxButton from '../components/RadioCheckboxButton';
+import { setValidateRule } from '../functions/validation';
+import AlertContext from '../context/AlertContext';
 
 const radioList = [
   {
@@ -27,9 +28,9 @@ const { get, set } = localStorageUlti(LIST_TO_DO_KEY, []);
 
 const EditAddNew = ({ isEditTask }) => {
   const [form, setForm] = useState({
-    title: "",
-    creator: "",
-    description: "",
+    title: '',
+    creator: '',
+    description: '',
     status: STATUS.NEW,
   });
   const [validData, setValidData] = useState({
@@ -37,6 +38,7 @@ const EditAddNew = ({ isEditTask }) => {
     creator: false,
     description: true,
   });
+  const alert = useContext(AlertContext);
 
   useEffect(() => {
     if (isEditTask) setDefaultValue();
@@ -77,6 +79,7 @@ const EditAddNew = ({ isEditTask }) => {
       status: STATUS.NEW,
     };
     set([data, ...get()]);
+    alert.success('this is alert', 3);
     navigate(ROUTE.All);
   };
 
@@ -99,7 +102,7 @@ const EditAddNew = ({ isEditTask }) => {
           {...item}
           key={`${item.name}_${index}`}
           onChange={handleChangeForm}
-          error={!item.value || validData[item.name] ? "" : item.messageError}
+          error={!item.value || validData[item.name] ? '' : item.messageError}
         />
       );
     });
@@ -115,7 +118,7 @@ const EditAddNew = ({ isEditTask }) => {
         title={item.title}
         type="radio"
         handleOnChange={handleChangeForm}
-        name={"status"}
+        name={'status'}
         value={item.value}
         isChecked={form.status === item.value}
       />
@@ -129,9 +132,9 @@ const EditAddNew = ({ isEditTask }) => {
         <>
           <div
             style={{
-              display: "flex",
-              width: "100%",
-              justifyContent: "space-between",
+              display: 'flex',
+              width: '100%',
+              justifyContent: 'space-between',
               marginTop: 40,
             }}
           >
@@ -139,19 +142,19 @@ const EditAddNew = ({ isEditTask }) => {
           </div>
           <div
             style={{
-              display: "flex",
+              display: 'flex',
               width: 324,
-              justifyContent: "space-between",
+              justifyContent: 'space-between',
             }}
           >
             <Button
-              title={"Save"}
+              title={'Save'}
               disabled={!checkValidate()}
               onClick={handleChangeTask}
             />
-            <Button title={"Reset"} onClick={setDefaultValue} />
+            <Button title={'Reset'} onClick={setDefaultValue} />
             <Button
-              title={"Delete"}
+              title={'Delete'}
               onClick={(e) => handleChangeTask(e, true)}
             />
           </div>
@@ -159,8 +162,8 @@ const EditAddNew = ({ isEditTask }) => {
       ) : (
         <div>
           <Button
-            title={"Save"}
-            type={"submit"}
+            title={'Save'}
+            type={'submit'}
             disabled={!checkValidate()}
             onClick={handleSubmit}
           />

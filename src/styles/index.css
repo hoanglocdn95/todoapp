@@ -4,6 +4,7 @@
 @import url(./body.css);
 @import url(./footer.css);
 @import url(./form.css);
+@import url(./alert.css);
 
 .layout {
   width: 1024px;
@@ -28,7 +29,6 @@
   color: var(--new);
 }
 
-/* <--- new class */
 .containerItem__status--doing {
   color: var(--doing);
 }
@@ -36,7 +36,6 @@
 .containerItem__status--done {
   color: var(--primary);
 }
-/* new class --->*/
 
 .containerItem__lineBreak {
   height: 2px;

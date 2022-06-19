@@ -1,13 +1,14 @@
-import "./styles/index.css";
-import { Routes, Route, Link } from "react-router-dom";
+import './styles/index.css';
+import { Routes, Route, Link } from 'react-router-dom';
 
-import Home from "./screens/Home";
-import All from "./screens/All";
-import New from "./screens/New";
-import Doing from "./screens/Doing";
-import Done from "./screens/Done";
-import EditAddNew from "./screens/EditAddNew";
-import { ROUTE } from "./constants";
+import Home from './screens/Home';
+import All from './screens/All';
+import New from './screens/New';
+import Doing from './screens/Doing';
+import Done from './screens/Done';
+import EditAddNew from './screens/EditAddNew';
+import Alert from './components/Alert';
+import { ROUTE } from './constants';
 
 function App() {
   return (
@@ -19,9 +20,9 @@ function App() {
             <Link
               to={ROUTE.All}
               style={{
-                display: "block",
-                margin: "30% auto",
-                fontWeight: "bold",
+                display: 'block',
+                margin: '30% auto',
+                fontWeight: 'bold',
                 fontSize: 60,
                 width: 475,
               }}
@@ -45,6 +46,7 @@ function App() {
           <Route index element={<All />} />
         </Route>
       </Routes>
+      <Alert />
     </div>
   );
 }
