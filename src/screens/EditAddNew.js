@@ -1,12 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { LIST_TO_DO_KEY, STATUS, ROUTE } from "../constants";
+import { LIST_TO_DO_KEY, STATUS, ROUTE, FEATURES } from "../constants";
 import { localStorageUlti } from "../functions/localStorage";
+import { initMessage } from "../functions/shared";
 import InputText from "../components/InputText";
 import Button from "../components/Button";
 import RadioCheckboxButton from "../components/RadioCheckboxButton";
 import { setValidateRule } from "../functions/validation";
+import AlertContext from "../context/AlertContext";
 
 const radioList = [
   {
@@ -25,6 +27,10 @@ const radioList = [
 
 const { get, set } = localStorageUlti(LIST_TO_DO_KEY, []);
 
+const getMessageAddNew = initMessage(FEATURES.ADD_NEW);
+const getMessageEditTask = initMessage(FEATURES.EDIT_TASK);
+const getMessageDeleteTask = initMessage(FEATURES.DELETE_TASK);
+
 const EditAddNew = ({ isEditTask }) => {
   const [form, setForm] = useState({
     title: "",
@@ -37,6 +43,7 @@ const EditAddNew = ({ isEditTask }) => {
     creator: false,
     description: true,
   });
+  const alert = useContext(AlertContext);
 
   useEffect(() => {
     if (isEditTask) setDefaultValue();
@@ -77,6 +84,7 @@ const EditAddNew = ({ isEditTask }) => {
       status: STATUS.NEW,
     };
     set([data, ...get()]);
+    alert.success(getMessageAddNew("Successful!!!"), 3);
     navigate(ROUTE.All);
   };
 
@@ -85,8 +93,10 @@ const EditAddNew = ({ isEditTask }) => {
     const todoItemsLocalStorage = get();
     if (!isDelete) {
       todoItemsLocalStorage.splice(idTask, 1, form);
+      alert.success(getMessageEditTask("Successful!!!"), 3);
     } else {
       todoItemsLocalStorage.splice(idTask, 1);
+      alert.success(getMessageDeleteTask("Successful!!!"), 3);
     }
     set([...todoItemsLocalStorage]);
     navigate(ROUTE.All);
