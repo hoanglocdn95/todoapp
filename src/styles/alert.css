@@ -8,7 +8,7 @@
   display: flex;
   background-color: white;
   max-height: 64px;
-  max-width: 300px;
+  max-width: 400px;
 }
 
 .alert--none {
@@ -45,4 +45,9 @@
   color: inherit;
   cursor: pointer;
   background-color: white;
+}
+
+.alert__clear:focus {
+  color: white;
+  background-color: var(--primary);
 }

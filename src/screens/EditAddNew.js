@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { LIST_TO_DO_KEY, STATUS, ROUTE, FEATURES } from '../constants';
+import { LIST_TO_DO_KEY, STATUS, ROUTE, FEATURES, ALERT } from '../constants';
 import { localStorageUlti } from '../functions/localStorage';
 import { initMessage } from '../functions/shared';
 import InputText from '../components/InputText';
@@ -84,7 +84,10 @@ const EditAddNew = ({ isEditTask }) => {
       status: STATUS.NEW,
     };
     set([data, ...get()]);
-    alert.success(getMessageAddNew('Successful!!!'), 30);
+    alert.success(
+      getMessageAddNew('Task is created successfully!'),
+      ALERT.DEFAULT_TIME
+    );
     navigate(ROUTE.All);
   };
 
@@ -93,10 +96,27 @@ const EditAddNew = ({ isEditTask }) => {
     const todoItemsLocalStorage = get();
     if (!isDelete) {
       todoItemsLocalStorage.splice(idTask, 1, form);
-      alert.success(getMessageEditTask('Successful!!!'), 3);
+      alert.success(
+        getMessageEditTask(
+          `Task have id: ${idTask} which is updated successfully!`
+        ),
+        ALERT.DEFAULT_TIME
+      );
     } else {
-      todoItemsLocalStorage.splice(idTask, 1);
-      alert.success(getMessageDeleteTask('Successful!!!'), 3);
+      const deletedItem = todoItemsLocalStorage.splice(idTask, 1);
+      alert.success(
+        getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
+        ALERT.DEFAULT_TIME,
+        {
+          label: 'UNDO',
+          action: () => {
+            const todoItemsLocalStorage = get();
+            todoItemsLocalStorage.splice(idTask, 0, deletedItem[0]);
+            set(todoItemsLocalStorage);
+            window.location.reload();
+          },
+        }
+      );
     }
     set([...todoItemsLocalStorage]);
     navigate(ROUTE.All);
