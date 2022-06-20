@@ -8,7 +8,7 @@
   display: flex;
   background-color: white;
   max-height: 64px;
-  max-width: 200px;
+  max-width: 300px;
 }
 
 .alert--none {
@@ -21,13 +21,14 @@
 }
 
 .alert--error {
-  border-color: var(--doing);
-  color: var(--doing);
+  border-color: #f90c0c;
+  color: #f90c0c;
 }
 
 .alert__content {
   color: inherit;
-  font-size: 14px;
+  font-size: 18px;
+  font-weight: bold;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -36,7 +37,7 @@
 
 .alert__clear {
   margin-left: 15px;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: bold;
   border-radius: 10px;
   border: 2px solid;

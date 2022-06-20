@@ -19,14 +19,14 @@ const AlertProvider = ({ children }) => {
           setAlert(ALERT.SUCCESS);
           setTimeout(() => {
             setAlert(ALERT.NONE);
-          }, timeout * ALERT.MINIMUM_TIME || ALERT.MAXIMUM_TIME);
+          }, timeout * ALERT.MINIMUM_TIME_MS || ALERT.MAXIMUM_TIME_MS);
         },
         error: (text, timeout) => {
           setAlertText(text);
           setAlert(ALERT.ERROR);
           setTimeout(() => {
             setAlert(ALERT.NONE);
-          }, timeout * ALERT.MINIMUM_TIME || ALERT.MAXIMUM_TIME);
+          }, timeout * ALERT.MINIMUM_TIME_MS || ALERT.MAXIMUM_TIME_MS);
         },
         clear: () => setAlert(ALERT.NONE),
       }}
