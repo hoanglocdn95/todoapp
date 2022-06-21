@@ -1,0 +1,39 @@
+{
+  "todoItems": [
+    {
+      "id": 2,
+      "title": "React Context",
+      "creator": "Hoang Loc",
+      "description": "Learn in 3 days",
+      "status": "New"
+    },
+    {
+      "title": "Learn JSON server3",
+      "creator": "Hoang Loc",
+      "description": "Learn in 1 day",
+      "status": "Doing",
+      "id": "NfoNSc-Oe5VzUTObRTQvy"
+    },
+    {
+      "id": "XTvDuzg21G9uty7or1ifV",
+      "title": "Learn Axios",
+      "creator": "Hoang Loc",
+      "description": "Learn in 2 days",
+      "status": "New"
+    },
+    {
+      "id": "8drCCBQaFM5PUPQPxWSuA",
+      "title": "Learn React 2",
+      "creator": "Hoang Loc",
+      "description": "Learn in a week",
+      "status": "New"
+    },
+    {
+      "id": "s9Glv-4pkqg5pypbXGvA0",
+      "title": "Learn RestAPI",
+      "creator": "Hoang Loc",
+      "description": "Learn RestAPI",
+      "status": "New"
+    }
+  ]
+}
