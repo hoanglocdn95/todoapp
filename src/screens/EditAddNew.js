@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
+import { observer } from 'mobx-react';
 
 import { STATUS, ROUTE, FEATURES, ALERT } from '../constants';
 import { initMessage } from '../functions/shared';
@@ -8,8 +9,8 @@ import InputText from '../components/InputText';
 import Button from '../components/Button';
 import RadioCheckboxButton from '../components/RadioCheckboxButton';
 import { setValidateRule } from '../functions/validation';
-import AlertContext from '../context/AlertContext';
 import clientServer from '../server/clientServer';
+import alertStore from '../stores/alertStore';
 
 const radioList = [
   {
@@ -45,7 +46,6 @@ const EditAddNew = ({ isEditTask }) => {
     creator: false,
     description: true,
   });
-  const alert = useContext(AlertContext);
   const formValueRef = useRef(null);
 
   useEffect(() => {
@@ -113,14 +113,14 @@ const EditAddNew = ({ isEditTask }) => {
     clientServer
       .post('todoItems', data)
       .then(() => {
-        alert.success(
+        alertStore.success(
           getMessageAddNew('Task is created successfully!'),
           ALERT.DEFAULT_TIME
         );
         navigate(ROUTE.All);
       })
       .catch((err) => {
-        alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
+        alertStore.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
       });
   };
 
@@ -130,7 +130,7 @@ const EditAddNew = ({ isEditTask }) => {
       clientServer
         .patch(`todoItems/${idTask}`, form)
         .then(() => {
-          alert.success(
+          alertStore.success(
             getMessageEditTask(
               `Task have id: ${idTask} which is updated successfully!`
             ),
@@ -139,13 +139,13 @@ const EditAddNew = ({ isEditTask }) => {
           navigate(ROUTE.All);
         })
         .catch((err) => {
-          alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
+          alertStore.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
         });
     } else {
       clientServer
         .delete(`todoItems/${idTask}`)
         .then(() => {
-          alert.success(
+          alertStore.success(
             getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
             ALERT.DEFAULT_TIME
             // we temporarily disable Undo feature
@@ -162,7 +162,10 @@ const EditAddNew = ({ isEditTask }) => {
           navigate(ROUTE.All);
         })
         .catch((err) => {
-          alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
+          alertStore.error(
+            getMessageDeleteTask(err.message),
+            ALERT.DEFAULT_TIME
+          );
         });
     }
   };
@@ -247,4 +250,4 @@ const EditAddNew = ({ isEditTask }) => {
   );
 };
 
-export default EditAddNew;
+export default observer(EditAddNew);

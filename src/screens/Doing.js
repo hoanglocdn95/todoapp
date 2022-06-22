@@ -1,17 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { observer } from 'mobx-react';
 
 import ListTodoItem from '../components/ListTodoItem';
 import Footer from '../layout/Footer';
 import { STATUS, ITEM_PER_PAGE } from '../constants';
 import usePagination from '../hooks/usePagination';
 import clientServer from '../server/clientServer';
+import todoStore from '../stores/todoStore';
 
 const Doing = () => {
-  const [todoItems, setTodoItems] = useState([]);
   const [searchParams] = useSearchParams();
   const { jumpPage, currentData, currentPage, maxPage } = usePagination(
-    todoItems,
+    todoStore.Todos,
     ITEM_PER_PAGE
   );
 
@@ -24,7 +25,7 @@ const Doing = () => {
             item.status === STATUS.DOING &&
             item.title.toLowerCase().includes(searchParams.get('keyword') || '')
         );
-        setTodoItems(listTodoItem);
+        todoStore.setTodos(listTodoItem);
       })
       .catch((err) => {
         console.error('error:', err);
@@ -45,4 +46,4 @@ const Doing = () => {
   );
 };
 
-export default Doing;
+export default observer(Doing);
