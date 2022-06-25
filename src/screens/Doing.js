@@ -6,7 +6,6 @@ import ListTodoItem from '../components/ListTodoItem';
 import Footer from '../layout/Footer';
 import { STATUS, ITEM_PER_PAGE } from '../constants';
 import usePagination from '../hooks/usePagination';
-import clientServer from '../server/clientServer';
 import todoStore from '../stores/todoStore';
 
 const Doing = () => {
@@ -17,19 +16,7 @@ const Doing = () => {
   );
 
   useEffect(() => {
-    clientServer
-      .get('todoItems')
-      .then((res) => {
-        const listTodoItem = res.data.filter(
-          (item) =>
-            item.status === STATUS.DOING &&
-            item.title.toLowerCase().includes(searchParams.get('keyword') || '')
-        );
-        todoStore.setTodos(listTodoItem);
-      })
-      .catch((err) => {
-        console.error('error:', err);
-      });
+    todoStore.reqTodosByStatus(STATUS.DOING, searchParams.get('keyword') || '');
   }, [searchParams]);
 
   return (

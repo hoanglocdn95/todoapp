@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { observer } from 'mobx-react';
@@ -9,8 +9,8 @@ import InputText from '../components/InputText';
 import Button from '../components/Button';
 import RadioCheckboxButton from '../components/RadioCheckboxButton';
 import { setValidateRule } from '../functions/validation';
-import clientServer from '../server/clientServer';
 import alertStore from '../stores/alertStore';
+import todoStore from '../stores/todoStore';
 
 const radioList = [
   {
@@ -46,39 +46,33 @@ const EditAddNew = ({ isEditTask }) => {
     creator: false,
     description: true,
   });
-  const formValueRef = useRef(null);
+
+  const {
+    CurrentItem,
+    reqDetailTask,
+    reqAddNewTask,
+    reqEditTask,
+    reqDeleteTask,
+  } = todoStore;
 
   useEffect(() => {
-    if (idTask) {
-      clientServer
-        .get(`todoItems/${idTask}`)
-        .then((res) => {
-          const { creator, description, title } = res.data;
-          setForm(res.data);
-          const formField = setValidateRule(res.data);
-          formValueRef.current = res.data;
-
-          setValidData({
-            title: formField.title.regExPattern.test(title),
-            creator: formField.creator.regExPattern.test(creator),
-            description: formField.description.regExPattern.test(description),
-          });
-        })
-        .catch((err) => {
-          console.error('error:', err);
-        });
-    }
+    reqDetailTask(idTask);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    setDefaultValue();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [CurrentItem]);
 
   const navigate = useNavigate();
   const { idTask } = useParams();
 
   const setDefaultValue = (e) => {
     e && e.preventDefault();
-    const { creator, description, title } = formValueRef.current;
-    setForm(formValueRef.current);
-    const formField = setValidateRule(formValueRef.current);
+    const { creator, description, title } = todoStore.CurrentItem;
+    setForm(CurrentItem);
+    const formField = setValidateRule(CurrentItem);
 
     setValidData({
       title: formField.title.regExPattern.test(title),
@@ -110,26 +104,26 @@ const EditAddNew = ({ isEditTask }) => {
       status: STATUS.NEW,
     };
 
-    clientServer
-      .post('todoItems', data)
-      .then(() => {
+    reqAddNewTask(
+      data,
+      () => {
         alertStore.success(
           getMessageAddNew('Task is created successfully!'),
           ALERT.DEFAULT_TIME
         );
         navigate(ROUTE.All);
-      })
-      .catch((err) => {
-        alertStore.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
-      });
+      },
+      (err) =>
+        alertStore.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME)
+    );
   };
 
   const handleChangeTask = (e, isDelete) => {
     e.preventDefault();
     if (!isDelete) {
-      clientServer
-        .patch(`todoItems/${idTask}`, form)
-        .then(() => {
+      reqEditTask(
+        form,
+        () => {
           alertStore.success(
             getMessageEditTask(
               `Task have id: ${idTask} which is updated successfully!`
@@ -137,36 +131,27 @@ const EditAddNew = ({ isEditTask }) => {
             ALERT.DEFAULT_TIME
           );
           navigate(ROUTE.All);
-        })
-        .catch((err) => {
-          alertStore.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
-        });
+        },
+        (err) =>
+          alertStore.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME)
+      );
     } else {
-      clientServer
-        .delete(`todoItems/${idTask}`)
-        .then(() => {
+      reqDeleteTask(
+        idTask,
+        () => {
           alertStore.success(
             getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
             ALERT.DEFAULT_TIME
-            // we temporarily disable Undo feature
-            // {
-            //   label: 'UNDO',
-            //   action: () => {
-            //     const todoItemsLocalStorage = get();
-            //     todoItemsLocalStorage.splice(idTask, 0, deletedItem[0]);
-            //     set(todoItemsLocalStorage);
-            //     window.location.reload();
-            //   },
-            // }
           );
           navigate(ROUTE.All);
-        })
-        .catch((err) => {
+        },
+        (err) => {
           alertStore.error(
             getMessageDeleteTask(err.message),
             ALERT.DEFAULT_TIME
           );
-        });
+        }
+      );
     }
   };
 
