@@ -1,6 +1,7 @@
-import { useState, useEffect, useContext, useRef } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { STATUS, ROUTE, FEATURES, ALERT } from '../constants';
 import { initMessage } from '../functions/shared';
@@ -10,6 +11,12 @@ import RadioCheckboxButton from '../components/RadioCheckboxButton';
 import { setValidateRule } from '../functions/validation';
 import AlertContext from '../context/AlertContext';
 import clientServer from '../server/clientServer';
+import {
+  detailTask,
+  addNew,
+  editTask,
+  deleteTask,
+} from '../redux/todos/todos.slice';
 
 const radioList = [
   {
@@ -46,39 +53,47 @@ const EditAddNew = ({ isEditTask }) => {
     description: true,
   });
   const alert = useContext(AlertContext);
-  const formValueRef = useRef(null);
-
-  useEffect(() => {
-    if (idTask) {
-      clientServer
-        .get(`todoItems/${idTask}`)
-        .then((res) => {
-          const { creator, description, title } = res.data;
-          setForm(res.data);
-          const formField = setValidateRule(res.data);
-          formValueRef.current = res.data;
-
-          setValidData({
-            title: formField.title.regExPattern.test(title),
-            creator: formField.creator.regExPattern.test(creator),
-            description: formField.description.regExPattern.test(description),
-          });
-        })
-        .catch((err) => {
-          console.error('error:', err);
-        });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   const navigate = useNavigate();
   const { idTask } = useParams();
+  const currentItem = useSelector((state) => state.todos.currentItem);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (idTask) dispatch(detailTask({ id: idTask }));
+  }, []);
+
+  useEffect(() => {
+    if (idTask) setDefaultValue();
+  }, [currentItem]);
+
+  // useEffect(() => {
+  //   if (idTask) {
+  //     clientServer
+  //       .get(`todoItems/${idTask}`)
+  //       .then((res) => {
+  //         const { creator, description, title } = res.data;
+  //         setForm(res.data);
+  //         const formField = setValidateRule(res.data);
+  //         formValueRef.current = res.data;
+
+  //         setValidData({
+  //           title: formField.title.regExPattern.test(title),
+  //           creator: formField.creator.regExPattern.test(creator),
+  //           description: formField.description.regExPattern.test(description),
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.error('error:', err);
+  //       });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   const setDefaultValue = (e) => {
     e && e.preventDefault();
-    const { creator, description, title } = formValueRef.current;
-    setForm(formValueRef.current);
-    const formField = setValidateRule(formValueRef.current);
+    const { creator, description, title } = currentItem;
+    setForm(currentItem);
+    const formField = setValidateRule(currentItem);
 
     setValidData({
       title: formField.title.regExPattern.test(title),
@@ -109,61 +124,73 @@ const EditAddNew = ({ isEditTask }) => {
       id: nanoid(),
       status: STATUS.NEW,
     };
+    dispatch(addNew(data));
+    alert.success(
+      getMessageAddNew('Task is created successfully!'),
+      ALERT.DEFAULT_TIME
+    );
+    navigate(ROUTE.All);
 
-    clientServer
-      .post('todoItems', data)
-      .then(() => {
-        alert.success(
-          getMessageAddNew('Task is created successfully!'),
-          ALERT.DEFAULT_TIME
-        );
-        navigate(ROUTE.All);
-      })
-      .catch((err) => {
-        alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
-      });
+    // clientServer
+    //   .post('todoItems', data)
+    //   .then(() => {
+    //     alert.success(
+    //       getMessageAddNew('Task is created successfully!'),
+    //       ALERT.DEFAULT_TIME
+    //     );
+    //     navigate(ROUTE.All);
+    //   })
+    //   .catch((err) => {
+    //     alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
+    //   });
   };
 
   const handleChangeTask = (e, isDelete) => {
     e.preventDefault();
     if (!isDelete) {
-      clientServer
-        .patch(`todoItems/${idTask}`, form)
-        .then(() => {
-          alert.success(
-            getMessageEditTask(
-              `Task have id: ${idTask} which is updated successfully!`
-            ),
-            ALERT.DEFAULT_TIME
-          );
-          navigate(ROUTE.All);
-        })
-        .catch((err) => {
-          alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
-        });
+      dispatch(editTask(form));
+      alert.success(
+        getMessageEditTask(
+          `Task have id: ${idTask} which is updated successfully!`
+        ),
+        ALERT.DEFAULT_TIME
+      );
+      navigate(ROUTE.All);
+
+      // clientServer
+      //   .patch(`todoItems/${idTask}`, form)
+      //   .then(() => {
+      //     alert.success(
+      //       getMessageEditTask(
+      //         `Task have id: ${idTask} which is updated successfully!`
+      //       ),
+      //       ALERT.DEFAULT_TIME
+      //     );
+      //     navigate(ROUTE.All);
+      //   })
+      //   .catch((err) => {
+      //     alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
+      //   });
     } else {
-      clientServer
-        .delete(`todoItems/${idTask}`)
-        .then(() => {
-          alert.success(
-            getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
-            ALERT.DEFAULT_TIME
-            // we temporarily disable Undo feature
-            // {
-            //   label: 'UNDO',
-            //   action: () => {
-            //     const todoItemsLocalStorage = get();
-            //     todoItemsLocalStorage.splice(idTask, 0, deletedItem[0]);
-            //     set(todoItemsLocalStorage);
-            //     window.location.reload();
-            //   },
-            // }
-          );
-          navigate(ROUTE.All);
-        })
-        .catch((err) => {
-          alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
-        });
+      dispatch(deleteTask({ id: idTask }));
+      alert.success(
+        getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
+        ALERT.DEFAULT_TIME
+      );
+      navigate(ROUTE.All);
+
+      // clientServer
+      //   .delete(`todoItems/${idTask}`)
+      //   .then(() => {
+      //     alert.success(
+      //       getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
+      //       ALERT.DEFAULT_TIME
+      //     );
+      //     navigate(ROUTE.All);
+      //   })
+      //   .catch((err) => {
+      //     alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
+      //   });
     }
   };
 
