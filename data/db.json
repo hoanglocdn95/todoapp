@@ -5,7 +5,7 @@
       "title": "React Context",
       "creator": "Hoang Loc",
       "description": "Learn in 3 days",
-      "status": "New"
+      "status": "Done"
     },
     {
       "title": "Learn JSON server3",
@@ -22,18 +22,18 @@
       "status": "New"
     },
     {
-      "id": "8drCCBQaFM5PUPQPxWSuA",
-      "title": "Learn React 2",
-      "creator": "Hoang Loc",
-      "description": "Learn in a week",
-      "status": "New"
-    },
-    {
       "id": "s9Glv-4pkqg5pypbXGvA0",
       "title": "Learn RestAPI",
       "creator": "Hoang Loc",
       "description": "Learn RestAPI",
       "status": "New"
+    },
+    {
+      "id": "vvUvUueDiBTue2jR4tI8B",
+      "title": "Redux Saga",
+      "creator": "Hoang Loc",
+      "description": "Learn in 1 day",
+      "status": "Doing"
     }
   ]
 }

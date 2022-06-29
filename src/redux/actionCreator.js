@@ -1,5 +1,9 @@
+import { generateActionCreator } from '../functions/shared';
+
 export const TODO = {
-  ADD_NEW: 'TODO/ADD_NEW',
-  EDIT_TASK: 'TODO/EDIT_TASK',
-  DELETE_TASK: 'TODO/DELETE_TASK',
+  ...generateActionCreator('GET_TODO'),
+  ...generateActionCreator('DETAIL_TASK'),
+  ...generateActionCreator('ADD_NEW'),
+  ...generateActionCreator('EDIT_TASK'),
+  ...generateActionCreator('DELETE_TASK'),
 };

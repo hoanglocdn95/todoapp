@@ -14,3 +14,13 @@ export const deleteTask = (payload) => ({
   type: TODO.DELETE_TASK,
   payload,
 });
+
+export const getTodos = (payload) => ({
+  type: TODO.GET_TODO,
+  payload,
+});
+
+export const getDetailTask = (payload) => ({
+  type: TODO.DETAIL_TASK,
+  payload,
+});

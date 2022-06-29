@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -5,8 +6,9 @@ import ListTodoItem from '../components/ListTodoItem';
 import Footer from '../layout/Footer';
 import { ITEM_PER_PAGE } from '../constants';
 import usePagination from '../hooks/usePagination';
+import { getTodos } from '../redux/actions/todos.actions';
 
-const All = ({ todos }) => {
+const All = ({ todos, dispatchGetTodos }) => {
   const [searchParams] = useSearchParams();
   const { jumpPage, currentData, currentPage, maxPage } = usePagination(
     todos.filter((item) =>
@@ -15,19 +17,10 @@ const All = ({ todos }) => {
     ITEM_PER_PAGE
   );
 
-  // useEffect(() => {
-  //   clientServer
-  //     .get('todoItems')
-  //     .then((res) => {
-  //       const listTodoItem = res.data.filter((item) =>
-  //         item.title.toLowerCase().includes(searchParams.get('keyword') || '')
-  //       );
-  //       setTodoItems(listTodoItem);
-  //     })
-  //     .catch((err) => {
-  //       console.error('error:', err);
-  //     });
-  // }, [searchParams]);
+  useEffect(() => {
+    dispatchGetTodos();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -44,7 +37,11 @@ const All = ({ todos }) => {
 };
 
 const mapStateToProps = (state) => ({
-  todos: state.todos,
+  todos: state.todos.todoItems,
 });
 
-export default connect(mapStateToProps)(All);
+const mapDispatchToProps = (dispatch) => ({
+  dispatchGetTodos: (payload) => dispatch(getTodos(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(All);

@@ -1,4 +1,4 @@
-import { FEATURES } from "../constants/index";
+import { FEATURES } from '../constants/index';
 
 export const initMessage = (feature) => {
   switch (feature) {
@@ -9,6 +9,14 @@ export const initMessage = (feature) => {
     case FEATURES.DELETE_TASK:
       return (message) => `DELETE TASK: ${message}`;
     default:
-      return () => "";
+      return () => '';
   }
+};
+
+export const generateActionCreator = (action) => {
+  return {
+    [action]: `${action}`,
+    [`${action}_SUCCESS`]: `${action}_SUCCESS`,
+    [`${action}_FAILED`]: `${action}_FAILED`,
+  };
 };

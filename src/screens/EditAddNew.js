@@ -15,6 +15,7 @@ import {
   addNewTodo,
   editTask,
   deleteTask,
+  getDetailTask,
 } from '../redux/actions/todos.actions';
 
 const radioList = [
@@ -46,10 +47,11 @@ const getMessageDeleteTask = initMessage(FEATURES.DELETE_TASK);
 
 const EditAddNew = ({
   isEditTask,
-  todos,
+  currentTask,
   dispatchAddNewTodo,
   dispatchEditTask,
   dispatchDeleteTask,
+  dispatchGetDetailTask,
 }) => {
   const [form, setForm] = useState(DEFAULT_VALUE);
   const [validData, setValidData] = useState({
@@ -58,40 +60,26 @@ const EditAddNew = ({
     description: true,
   });
   const alert = useContext(AlertContext);
+  const navigate = useNavigate();
+  const { idTask } = useParams();
 
   useEffect(() => {
     if (idTask) {
       setDefaultValue();
-      // clientServer
-      //   .get(`todoItems/${idTask}`)
-      //   .then((res) => {
-      //     const { creator, description, title } = res.data;
-      //     setForm(res.data);
-      //     const formField = setValidateRule(res.data);
-      //     formValueRef.current = res.data;
-
-      //     setValidData({
-      //       title: formField.title.regExPattern.test(title),
-      //       creator: formField.creator.regExPattern.test(creator),
-      //       description: formField.description.regExPattern.test(description),
-      //     });
-      //   })
-      //   .catch((err) => {
-      //     console.error('error:', err);
-      //   });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [todos]);
+  }, [currentTask]);
 
-  const navigate = useNavigate();
-  const { idTask } = useParams();
+  useEffect(() => {
+    dispatchGetDetailTask({ idTask });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const setDefaultValue = (e) => {
     e && e.preventDefault();
-    const todoItems = todos.filter((item) => item.id === idTask)[0];
-    const { creator, description, title } = todoItems;
-    setForm(todoItems);
-    const formField = setValidateRule(todoItems);
+    const { creator, description, title } = currentTask;
+    setForm(currentTask);
+    const formField = setValidateRule(currentTask);
 
     setValidData({
       title: formField.title.regExPattern.test(title),
@@ -132,18 +120,6 @@ const EditAddNew = ({
     } catch (err) {
       alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
     }
-    // clientServer
-    //   .post('todoItems', data)
-    //   .then(() => {
-    //     alert.success(
-    //       getMessageAddNew('Task is created successfully!'),
-    //       ALERT.DEFAULT_TIME
-    //     );
-    //     navigate(ROUTE.All);
-    //   })
-    //   .catch((err) => {
-    //     alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
-    //   });
   };
 
   const handleChangeTask = (e, isDelete) => {
@@ -161,20 +137,6 @@ const EditAddNew = ({
       } catch (err) {
         alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
       }
-      // clientServer
-      //   .patch(`todoItems/${idTask}`, form)
-      //   .then(() => {
-      //     alert.success(
-      //       getMessageEditTask(
-      //         `Task have id: ${idTask} which is updated successfully!`
-      //       ),
-      //       ALERT.DEFAULT_TIME
-      //     );
-      //     navigate(ROUTE.All);
-      //   })
-      //   .catch((err) => {
-      //     alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
-      //   });
     } else {
       try {
         dispatchDeleteTask({
@@ -188,18 +150,6 @@ const EditAddNew = ({
       } catch (err) {
         alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
       }
-      // clientServer
-      //   .delete(`todoItems/${idTask}`)
-      //   .then(() => {
-      //     alert.success(
-      //       getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
-      //       ALERT.DEFAULT_TIME
-      //     );
-      //     navigate(ROUTE.All);
-      //   })
-      //   .catch((err) => {
-      //     alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
-      //   });
     }
   };
 
@@ -284,13 +234,14 @@ const EditAddNew = ({
 };
 
 const mapStateToProps = (state) => ({
-  todos: state.todos,
+  currentTask: state.todos.currentTask,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   dispatchAddNewTodo: (payload) => dispatch(addNewTodo(payload)),
   dispatchEditTask: (payload) => dispatch(editTask(payload)),
   dispatchDeleteTask: (payload) => dispatch(deleteTask(payload)),
+  dispatchGetDetailTask: (payload) => dispatch(getDetailTask(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditAddNew);
