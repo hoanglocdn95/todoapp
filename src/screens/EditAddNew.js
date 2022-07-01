@@ -1,10 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useTransition } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { STATUS, ROUTE, FEATURES, ALERT } from '../constants';
-import { initMessage } from '../functions/shared';
+import { initMessage } from '../functions/shared.ts';
 import InputText from '../components/InputText';
 import Button from '../components/Button';
 import RadioCheckboxButton from '../components/RadioCheckboxButton';
@@ -56,6 +56,7 @@ const EditAddNew = ({ isEditTask }) => {
   const { idTask } = useParams();
   const currentItem = useSelector((state) => state.todos.currentItem);
   const dispatch = useDispatch();
+  const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     if (idTask) dispatch(reqDetailTask({ id: idTask }));
@@ -71,10 +72,12 @@ const EditAddNew = ({ isEditTask }) => {
     setForm(currentItem);
     const formField = setValidateRule(currentItem);
 
-    setValidData({
-      title: formField.title.regExPattern.test(title),
-      creator: formField.creator.regExPattern.test(creator),
-      description: formField.description.regExPattern.test(description),
+    startTransition(() => {
+      setValidData({
+        title: formField.title.regExPattern.test(title),
+        creator: formField.creator.regExPattern.test(creator),
+        description: formField.description.regExPattern.test(description),
+      });
     });
   };
 
@@ -86,9 +89,11 @@ const EditAddNew = ({ isEditTask }) => {
     });
 
     if (name !== 'status') {
-      setValidData({
-        ...validData,
-        [name]: setValidateRule(form)[name].regExPattern.test(value),
+      startTransition(() => {
+        setValidData({
+          ...validData,
+          [name]: setValidateRule(form)[name].regExPattern.test(value),
+        });
       });
     }
   };
@@ -223,6 +228,7 @@ const EditAddNew = ({ isEditTask }) => {
           />
         </div>
       )}
+      {isPending && <p>Typing...</p>}
     </form>
   );
 };

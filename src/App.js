@@ -1,5 +1,6 @@
 import './styles/index.css';
 import { Routes, Route, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Home from './screens/Home';
 import All from './screens/All';
@@ -8,11 +9,14 @@ import Doing from './screens/Doing';
 import Done from './screens/Done';
 import EditAddNew from './screens/EditAddNew';
 import Alert from './components/Alert';
+import LoadingIndicator from './components/LoadingIndicator';
 import { ROUTE } from './constants';
 
 function App() {
+  const isLoading = useSelector((state) => state.todos.isLoading);
   return (
     <div className="layout">
+      {isLoading && <LoadingIndicator />}
       <Routes>
         <Route
           path={ROUTE.NOT_FOUND}

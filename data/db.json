@@ -40,14 +40,14 @@
       "title": "Redux-toolkit 4",
       "creator": "Hoang Loc",
       "description": "Redux-toolkit 4",
-      "status": "New"
+      "status": "Doing"
     },
     {
       "id": "SvVaSz52WYyDi9rTjjeGM",
       "title": "Redux-toolkit 4",
       "creator": "Hoang Loc",
       "description": "Redux-toolkit 4",
-      "status": "New"
+      "status": "Done"
     },
     {
       "id": "FnAk1uplITaqaNaQ_omfj",
@@ -83,6 +83,13 @@
       "creator": "Hoang Loc",
       "description": "Redux-toolit 5",
       "status": "Done"
+    },
+    {
+      "id": "niaAFF9M7giyTFshFONFW",
+      "title": "Test Loading",
+      "creator": "Hoang Loc",
+      "description": "Test Loading",
+      "status": "New"
     }
   ]
 }

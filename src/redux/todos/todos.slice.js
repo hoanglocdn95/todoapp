@@ -16,6 +16,7 @@ const initialState = {
     description: '',
     status: '',
   },
+  isLoading: false,
 };
 
 export const todosSlice = createSlice({
@@ -24,27 +25,55 @@ export const todosSlice = createSlice({
   reducers: {},
   extraReducers(builder) {
     builder
-      .addCase(reqTodosByStatus.pending, (state, action) => {})
+      .addCase(reqTodosByStatus.pending, (state, action) => {
+        state.isLoading = true;
+      })
       .addCase(reqTodosByStatus.fulfilled, (state, action) => {
         state.todoItems = action.payload;
+        state.isLoading = false;
       })
-      .addCase(reqTodosByStatus.rejected, (state, action) => {})
+      .addCase(reqTodosByStatus.rejected, (state, action) => {
+        state.isLoading = false;
+      })
 
-      .addCase(reqDetailTask.pending, (state, action) => {})
+      .addCase(reqDetailTask.pending, (state, action) => {
+        state.isLoading = true;
+      })
       .addCase(reqDetailTask.fulfilled, (state, action) => {
         state.currentItem = action.payload;
+        state.isLoading = false;
       })
-      .addCase(reqDetailTask.rejected, (state, action) => {})
+      .addCase(reqDetailTask.rejected, (state, action) => {
+        state.isLoading = false;
+      })
       // We don't have anything to deal with here for the time being
-      .addCase(reqAddNew.pending, (state, action) => {})
-      .addCase(reqAddNew.fulfilled, (state, action) => {})
-      .addCase(reqAddNew.rejected, (state, action) => {})
-      .addCase(reqEditTask.pending, (state, action) => {})
-      .addCase(reqEditTask.fulfilled, (state, action) => {})
-      .addCase(reqEditTask.rejected, (state, action) => {})
-      .addCase(reqDeleteTask.pending, (state, action) => {})
-      .addCase(reqDeleteTask.fulfilled, (state, action) => {})
-      .addCase(reqDeleteTask.rejected, (state, action) => {});
+      .addCase(reqAddNew.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(reqAddNew.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(reqAddNew.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(reqEditTask.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(reqEditTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(reqEditTask.rejected, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(reqDeleteTask.pending, (state, action) => {
+        state.isLoading = true;
+      })
+      .addCase(reqDeleteTask.fulfilled, (state, action) => {
+        state.isLoading = false;
+      })
+      .addCase(reqDeleteTask.rejected, (state, action) => {
+        state.isLoading = false;
+      });
   },
 });
 
