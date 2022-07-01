@@ -19,14 +19,14 @@
       "title": "Learn Axios",
       "creator": "Hoang Loc",
       "description": "Learn in 2 days",
-      "status": "New"
+      "status": "Done"
     },
     {
       "id": "8drCCBQaFM5PUPQPxWSuA",
       "title": "Learn React 2",
       "creator": "Hoang Loc",
       "description": "Learn in a week",
-      "status": "New"
+      "status": "Doing"
     },
     {
       "id": "s9Glv-4pkqg5pypbXGvA0",
@@ -34,6 +34,55 @@
       "creator": "Hoang Loc",
       "description": "Learn RestAPI",
       "status": "New"
+    },
+    {
+      "id": "U4Rg1UlCIGAJvOBoU1Orv",
+      "title": "Redux-toolkit 4",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolkit 4",
+      "status": "New"
+    },
+    {
+      "id": "SvVaSz52WYyDi9rTjjeGM",
+      "title": "Redux-toolkit 4",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolkit 4",
+      "status": "New"
+    },
+    {
+      "id": "FnAk1uplITaqaNaQ_omfj",
+      "title": "Redux-toolkit 4",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolkit 4",
+      "status": "New"
+    },
+    {
+      "id": "6sBfFwmQzhP7spKKEYyGX",
+      "title": "Redux-toolkit 4",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolkit 4",
+      "status": "New"
+    },
+    {
+      "id": "u87kH0VVgKgOXn8a4lfSh",
+      "title": "Redux-toolkit 4",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolkit 4",
+      "status": "New"
+    },
+    {
+      "id": "s0xNzMPwRUMLAewt0dtzd",
+      "title": "Redux-toolkit 4",
+      "creator": "Creator",
+      "description": "Redux-toolkit 4",
+      "status": "Doing"
+    },
+    {
+      "id": "z6qfdfA5AWKBCS8_le4v_",
+      "title": "Redux-toolit 5",
+      "creator": "Hoang Loc",
+      "description": "Redux-toolit 5",
+      "status": "Done"
     }
   ]
 }

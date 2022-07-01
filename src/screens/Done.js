@@ -1,38 +1,27 @@
-import { useSearchParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
-import ListTodoItem from "../components/ListTodoItem";
-import Footer from "../layout/Footer";
-import { STATUS, ITEM_PER_PAGE } from "../constants";
-import usePagination from "../hooks/usePagination";
+import ListTodoItem from '../components/ListTodoItem';
+import Footer from '../layout/Footer';
+import { STATUS, ITEM_PER_PAGE } from '../constants';
+import usePagination from '../hooks/usePagination';
+import { reqTodosByStatus } from '../server/todosServer';
 
 const Done = () => {
   const [searchParams] = useSearchParams();
   const todos = useSelector((state) => state.todos.todoItems);
   const { jumpPage, currentData, currentPage, maxPage } = usePagination(
-    todos.filter(
-      (item) =>
-        item.status === STATUS.DONE &&
-        item.title.toLowerCase().includes(searchParams.get("keyword") || "")
+    todos.filter((item) =>
+      item.title.toLowerCase().includes(searchParams.get('keyword') || '')
     ),
     ITEM_PER_PAGE
   );
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   clientServer
-  //     .get('todoItems')
-  //     .then((res) => {
-  //       const listTodoItem = res.data.filter(
-  //         (item) =>
-  //           item.status === STATUS.DOING &&
-  //           item.title.toLowerCase().includes(searchParams.get('keyword') || '')
-  //       );
-  //       setTodoItems(listTodoItem);
-  //     })
-  //     .catch((err) => {
-  //       console.error('error:', err);
-  //     });
-  // }, [searchParams]);
+  useEffect(() => {
+    dispatch(reqTodosByStatus(STATUS.DONE));
+  }, []);
 
   return (
     <>

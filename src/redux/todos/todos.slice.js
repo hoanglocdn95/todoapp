@@ -1,16 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { STATUS } from '../../constants/index';
+import {
+  reqTodosByStatus,
+  reqDetailTask,
+  reqAddNew,
+  reqEditTask,
+  reqDeleteTask,
+} from '../../server/todosServer';
 
 const initialState = {
-  todoItems: [
-    {
-      id: '0',
-      title: 'Redux-toolkit',
-      creator: 'Hoang Loc',
-      description: 'Learn in 1 day',
-      status: STATUS.NEW,
-    },
-  ],
+  todoItems: [],
   currentItem: {
     id: '',
     title: '',
@@ -23,31 +21,33 @@ const initialState = {
 export const todosSlice = createSlice({
   name: 'todos',
   initialState,
-  reducers: {
-    detailTask: (state, action) => {
-      state.currentItem = state.todoItems.find(
-        (item) => item.id === action.payload.id
-      );
-    },
-    addNew: (state, action) => {
-      state.todoItems = [...state.todoItems, action.payload];
-    },
-    editTask: (state, action) => {
-      state.todoItems = state.todoItems.map((item) =>
-        item.id === action.payload.id ? action.payload : item
-      );
-    },
-    deleteTask: (state, action) => {
-      const todos = state.todoItems;
-      const indexItem = state.todoItems.findIndex(
-        (item) => item.id === action.payload.id
-      );
-      todos.splice(indexItem, 1);
-      state.todoItems = [...todos];
-    },
+  reducers: {},
+  extraReducers(builder) {
+    builder
+      .addCase(reqTodosByStatus.pending, (state, action) => {})
+      .addCase(reqTodosByStatus.fulfilled, (state, action) => {
+        state.todoItems = action.payload;
+      })
+      .addCase(reqTodosByStatus.rejected, (state, action) => {})
+
+      .addCase(reqDetailTask.pending, (state, action) => {})
+      .addCase(reqDetailTask.fulfilled, (state, action) => {
+        state.currentItem = action.payload;
+      })
+      .addCase(reqDetailTask.rejected, (state, action) => {})
+      // We don't have anything to deal with here for the time being
+      .addCase(reqAddNew.pending, (state, action) => {})
+      .addCase(reqAddNew.fulfilled, (state, action) => {})
+      .addCase(reqAddNew.rejected, (state, action) => {})
+      .addCase(reqEditTask.pending, (state, action) => {})
+      .addCase(reqEditTask.fulfilled, (state, action) => {})
+      .addCase(reqEditTask.rejected, (state, action) => {})
+      .addCase(reqDeleteTask.pending, (state, action) => {})
+      .addCase(reqDeleteTask.fulfilled, (state, action) => {})
+      .addCase(reqDeleteTask.rejected, (state, action) => {});
   },
 });
 
-export const { detailTask, addNew, editTask, deleteTask } = todosSlice.actions;
+export const {} = todosSlice.actions;
 
 export default todosSlice.reducer;

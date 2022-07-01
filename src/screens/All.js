@@ -1,10 +1,12 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import ListTodoItem from '../components/ListTodoItem';
 import Footer from '../layout/Footer';
 import { ITEM_PER_PAGE } from '../constants';
 import usePagination from '../hooks/usePagination';
+import { reqTodosByStatus } from '../server/todosServer';
 
 const All = () => {
   const [searchParams] = useSearchParams();
@@ -15,20 +17,11 @@ const All = () => {
     ),
     ITEM_PER_PAGE
   );
+  const dispatch = useDispatch();
 
-  // useEffect(() => {
-  //   clientServer
-  //     .get("todoItems")
-  //     .then((res) => {
-  //       const listTodoItem = res.data.filter((item) =>
-  //         item.title.toLowerCase().includes(searchParams.get("keyword") || "")
-  //       );
-  //       setTodoItems(listTodoItem);
-  //     })
-  //     .catch((err) => {
-  //       console.error("error:", err);
-  //     });
-  // }, [searchParams]);
+  useEffect(() => {
+    dispatch(reqTodosByStatus());
+  }, []);
 
   return (
     <>

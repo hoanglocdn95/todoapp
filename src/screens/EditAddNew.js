@@ -10,13 +10,12 @@ import Button from '../components/Button';
 import RadioCheckboxButton from '../components/RadioCheckboxButton';
 import { setValidateRule } from '../functions/validation';
 import AlertContext from '../context/AlertContext';
-import clientServer from '../server/clientServer';
 import {
-  detailTask,
-  addNew,
-  editTask,
-  deleteTask,
-} from '../redux/todos/todos.slice';
+  reqDetailTask,
+  reqAddNew,
+  reqEditTask,
+  reqDeleteTask,
+} from '../server/todosServer';
 
 const radioList = [
   {
@@ -59,35 +58,12 @@ const EditAddNew = ({ isEditTask }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (idTask) dispatch(detailTask({ id: idTask }));
+    if (idTask) dispatch(reqDetailTask({ id: idTask }));
   }, []);
 
   useEffect(() => {
     if (idTask) setDefaultValue();
   }, [currentItem]);
-
-  // useEffect(() => {
-  //   if (idTask) {
-  //     clientServer
-  //       .get(`todoItems/${idTask}`)
-  //       .then((res) => {
-  //         const { creator, description, title } = res.data;
-  //         setForm(res.data);
-  //         const formField = setValidateRule(res.data);
-  //         formValueRef.current = res.data;
-
-  //         setValidData({
-  //           title: formField.title.regExPattern.test(title),
-  //           creator: formField.creator.regExPattern.test(creator),
-  //           description: formField.description.regExPattern.test(description),
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.error('error:', err);
-  //       });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const setDefaultValue = (e) => {
     e && e.preventDefault();
@@ -124,73 +100,50 @@ const EditAddNew = ({ isEditTask }) => {
       id: nanoid(),
       status: STATUS.NEW,
     };
-    dispatch(addNew(data));
-    alert.success(
-      getMessageAddNew('Task is created successfully!'),
-      ALERT.DEFAULT_TIME
+    dispatch(
+      reqAddNew({
+        data: data,
+        callback: () => {
+          alert.success(
+            getMessageAddNew('Task is created successfully!'),
+            ALERT.DEFAULT_TIME
+          );
+          navigate(ROUTE.All);
+        },
+      })
     );
-    navigate(ROUTE.All);
-
-    // clientServer
-    //   .post('todoItems', data)
-    //   .then(() => {
-    //     alert.success(
-    //       getMessageAddNew('Task is created successfully!'),
-    //       ALERT.DEFAULT_TIME
-    //     );
-    //     navigate(ROUTE.All);
-    //   })
-    //   .catch((err) => {
-    //     alert.error(getMessageAddNew(err.message), ALERT.DEFAULT_TIME);
-    //   });
   };
 
   const handleChangeTask = (e, isDelete) => {
     e.preventDefault();
     if (!isDelete) {
-      dispatch(editTask(form));
-      alert.success(
-        getMessageEditTask(
-          `Task have id: ${idTask} which is updated successfully!`
-        ),
-        ALERT.DEFAULT_TIME
+      dispatch(
+        reqEditTask({
+          data: form,
+          callback: () => {
+            alert.success(
+              getMessageEditTask(
+                `Task have id: ${idTask} which is updated successfully!`
+              ),
+              ALERT.DEFAULT_TIME
+            );
+            navigate(ROUTE.All);
+          },
+        })
       );
-      navigate(ROUTE.All);
-
-      // clientServer
-      //   .patch(`todoItems/${idTask}`, form)
-      //   .then(() => {
-      //     alert.success(
-      //       getMessageEditTask(
-      //         `Task have id: ${idTask} which is updated successfully!`
-      //       ),
-      //       ALERT.DEFAULT_TIME
-      //     );
-      //     navigate(ROUTE.All);
-      //   })
-      //   .catch((err) => {
-      //     alert.error(getMessageEditTask(err.message), ALERT.DEFAULT_TIME);
-      //   });
     } else {
-      dispatch(deleteTask({ id: idTask }));
-      alert.success(
-        getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
-        ALERT.DEFAULT_TIME
+      dispatch(
+        reqDeleteTask({
+          id: idTask,
+          callback: () => {
+            alert.success(
+              getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
+              ALERT.DEFAULT_TIME
+            );
+            navigate(ROUTE.All);
+          },
+        })
       );
-      navigate(ROUTE.All);
-
-      // clientServer
-      //   .delete(`todoItems/${idTask}`)
-      //   .then(() => {
-      //     alert.success(
-      //       getMessageDeleteTask(`Task have id: ${idTask} which is deleted!`),
-      //       ALERT.DEFAULT_TIME
-      //     );
-      //     navigate(ROUTE.All);
-      //   })
-      //   .catch((err) => {
-      //     alert.error(getMessageDeleteTask(err.message), ALERT.DEFAULT_TIME);
-      //   });
     }
   };
 
