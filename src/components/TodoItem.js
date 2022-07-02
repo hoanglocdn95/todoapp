@@ -1,16 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ROUTE } from '../constants';
 
-type Props = {
-  title: string,
-  creator: string,
-  status: string,
-  description: string,
-  idTask: string,
-};
-
-const TodoItem = (props: Props) => {
-  const { title, creator, status, description, idTask } = props;
+const TodoItem = ({ title, creator, status, description, idTask }) => {
   return (
     <div
       className="containerItem"

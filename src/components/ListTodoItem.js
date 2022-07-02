@@ -1,4 +1,4 @@
-import TodoItem from './TodoItem.ts';
+import TodoItem from './TodoItem.js';
 
 const ListTodoItem = ({ todoItems }) => {
   return todoItems.map((item, index) => (

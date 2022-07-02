@@ -1,4 +1,4 @@
-import { FEATURES } from '../constants/index.js';
+import { FEATURES } from '../constants/index';
 
 export const initMessage = (feature: string) => {
   switch (feature) {
